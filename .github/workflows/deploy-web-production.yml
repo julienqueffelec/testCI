@@ -39,7 +39,7 @@ jobs:
 
   githubTag:
     needs: deploy
-    if: needs.deploy.result == 'skipped' || needs.deploy.result == 'success'
+    if: needs.deploy.result == 'success'
     #runs-on: [ self-hosted, linux ]
     runs-on: ubuntu-latest
     timeout-minutes: 5
