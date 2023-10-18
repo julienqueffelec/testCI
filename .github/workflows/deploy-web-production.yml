@@ -18,8 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.inputs.skip_e2e == 'false' }}
     steps:
-      - name: echo success
-        run: echo "success"
+      # fail the jo
+      - name: fail exit
+        run: exit 1
 
   build:
     needs: e2e
@@ -46,6 +47,14 @@ jobs:
     name: Create web production tag
     environment:
       name: production
+    steps:
+      - name: echo success
+        run: echo "success"
+
+  slackNotifyE2Efail:
+    needs: e2e
+    if: always() && needs.e2e.result == 'failure'
+    runs-on: ubuntu-latest
     steps:
       - name: echo success
         run: echo "success"
