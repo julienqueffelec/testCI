@@ -25,11 +25,17 @@ jobs:
     needs: e2e
     runs-on: ubuntu-latest
     if: always() && (needs.e2e.result == 'skipped' || needs.e2e.result == 'success')
+    steps:
+      - name: echo success
+        run: echo "success"
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
     if: needs.build.result == 'skipped' || needs.build.result == 'success'
+    steps:
+      - name: echo success
+        run: echo "success"
 
   githubTag:
     needs: deploy
