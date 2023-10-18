@@ -32,7 +32,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-    if: needs.build.result == 'skipped' || needs.build.result == 'success'
+    if: needs.build.result == 'success'
     steps:
       - name: echo success
         run: echo "success"
