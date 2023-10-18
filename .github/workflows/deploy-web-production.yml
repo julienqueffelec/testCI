@@ -1,0 +1,45 @@
+name: 🤖 Build and Deploy web - Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      skip_e2e:
+        description: Skip e2e tests
+        default: 'false'
+        required: false
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+
+jobs:
+  e2e:
+    name: E2E tests
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.skip_e2e == 'false' }}
+    steps:
+      - name: echo success
+        run: echo "success"
+
+  build:
+    needs: e2e
+    runs-on: ubuntu-latest
+    if: always() && (needs.e2e.result == 'skipped' || needs.e2e.result == 'success')
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: needs.build.result == 'skipped' || needs.build.result == 'success'
+
+  githubTag:
+    needs: deploy
+    if: needs.deploy.result == 'skipped' || needs.deploy.result == 'success'
+    #runs-on: [ self-hosted, linux ]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    name: Create web production tag
+    environment:
+      name: production
+    steps:
+      - name: echo success
+        run: echo "success"
